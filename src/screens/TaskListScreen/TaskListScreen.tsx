@@ -14,9 +14,7 @@ const TaskListScreen = () => {
   const {colorText, backgroundColor} = useTheme();
 
   const [tasks, setTasks] = useState<TaskType[]>([]);
-  const [showedTasks, setShowedTasks] = useState<TaskType[] | undefined>(
-    undefined,
-  );
+  const [showedTasks, setShowedTasks] = useState<TaskType[] | undefined>(undefined);
   // Формы
   const [isOpenededFormAddTasks, setOpenedFormAddTasks] =
     useState<boolean>(false);
