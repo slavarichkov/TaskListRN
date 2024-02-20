@@ -1,57 +1,46 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, {useEffect, useState} from 'react';
-import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Alert, Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {TaskType} from '../../utils/types';
 import {sortByDateAscending} from '../../utils/functions';
 import {useTheme} from '../../contexts/theme/ThemeContext';
 import HeaderListTasks from './components/HeaderListTasks';
 import ItemListTasks from './components/ItemListTasks';
 import FormAddOrUpdate from './components/FormAddOrUpdate';
+import apiTask from '../../services/api';
+import {getDeviceId} from '../../utils/asyncStoreFunctions';
 
 const TaskListScreen = () => {
-  const task1 = {
-    _id: '1111',
-    date: new Date().toString(),
-    name: 'TaskListScreen',
-    text: 'Task List Screen',
-    isImportant: false,
-    isDone: false,
-  };
+  const {colorText, backgroundColor} = useTheme();
 
-  const task2 = {
-    _id: '11111',
-    date: new Date().toString(),
-    name: 'TaskListScreen',
-    text: 'Task List Screen',
-    isImportant: false,
-    isDone: false,
-  };
-
-  const testArray = [task1, task2];
-
-  const {colorText} = useTheme();
-
-  const [tasks, setTasks] = useState<TaskType[] | undefined>(undefined);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
   const [showedTasks, setShowedTasks] = useState<TaskType[] | undefined>(
     undefined,
   );
   // Формы
   const [isOpenededFormAddTasks, setOpenedFormAddTasks] =
     useState<boolean>(false);
-  const [isOpenededFormUpdateTasks, setOpenedFormUpdateTasks] =
-    useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<any>();
+  const [updatingItem, setUpdatingItem] = useState<any>();
   // Лоадеры
   const [isSubmitLoading, setSubmitLoading] = useState<boolean>(false);
   // Фильтр
   const [isImportantTasks, setImportantTasks] = useState<boolean>(false);
 
   function handleClickUpdate(item: any) {
-    setSelectedItem(item);
-    openFormUpdateTasks();
+    setUpdatingItem(item);
+    openFormAddTasks();
   }
 
-  function handleCkickRemove(item: any) {}
+  async function handleCkickRemove(id: string) {
+    try {
+      const deviceId = await getDeviceId();
+      await apiTask.removeTask(deviceId, id);
+      const filtredTasks = tasks.filter(task => task._id !== id);
+      setTasks(filtredTasks);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   function openFormAddTasks() {
     setOpenedFormAddTasks(true);
@@ -59,38 +48,104 @@ const TaskListScreen = () => {
 
   function closeFormAddOrUpdateTasks() {
     setOpenedFormAddTasks(false);
+    setUpdatingItem(undefined);
   }
 
-  function createTasks(data: TaskType) {
-    console.log(data);
+  async function createTasks(data: TaskType) {
+    try {
+      setSubmitLoading(true);
+      const deviceId = await getDeviceId();
+      data.author = deviceId;
+      const newTask = await apiTask.createTask(data);
+      const updateTasks = [...tasks, newTask.task];
+      setTasks(updateTasks);
+      setSubmitLoading(false);
+      closeFormAddOrUpdateTasks();
+    } catch (error) {
+      setSubmitLoading(false);
+      Alert.alert('Ошибка', 'Не удалось добавить задачу, попробуйте позже');
+    }
   }
 
-  function openFormUpdateTasks() {
-    setOpenedFormUpdateTasks(true);
+  async function updateTasks(data: TaskType) {
+    try {
+      setSubmitLoading(true);
+      const deviceId = await getDeviceId();
+      data.author = deviceId;
+      data._id = updatingItem._id;
+      console.log(data);
+      const updatedTask = await apiTask.updateTask(data);
+      const updatedTasks = tasks.map(task => {
+        if (task._id.toString() === updatedTask.task._id.toString()) {
+          return updatedTask.task;
+        } else {
+          return task; // если это не объект для замены, оставляем его без изменений
+        }
+      });
+      setTasks(updatedTasks);
+      setSubmitLoading(false);
+      closeFormAddOrUpdateTasks();
+    } catch (error) {
+      setSubmitLoading(false);
+      setSubmitLoading(false);
+      Alert.alert('Ошибка', 'Не удалось добавить задачу, попробуйте позже');
+    }
   }
 
-  function updateTasks(data: TaskType) {
-    console.log(data);
-  }
-
-  function handleCkickDone(data: TaskType) {
-    console.log(data);
+  async function handleCkickDone(selectedTask: TaskType) {
+    try {
+      setSubmitLoading(true);
+      const updatedTask = await apiTask.updateTask(selectedTask);
+      const updatedTasks = tasks.map(task => {
+        if (task._id.toString() === updatedTask.task._id.toString()) {
+          return updatedTask.task;
+        } else {
+          return task;
+        }
+      });
+      setTasks(updatedTasks);
+      setSubmitLoading(false);
+      closeFormAddOrUpdateTasks();
+    } catch (error) {
+      console.log(error);
+      setSubmitLoading(false);
+      setSubmitLoading(false);
+      Alert.alert('Ошибка', 'Не удалось добавить задачу, попробуйте позже');
+    }
   }
 
   function controlFiltrerImportant() {
     setImportantTasks(!isImportantTasks);
   }
 
+  // Получить список задач
+  async function getTasksUser() {
+    try {
+      const deviceId = await getDeviceId();
+      const tasksArray = await apiTask.getTasks(deviceId);
+      setTasks(tasksArray.tasks);
+    } catch {
+      Alert.alert(
+        'Ошибка',
+        'Не удалось получить список задач с сервера, попробуйте позже',
+      );
+    }
+  }
+
+  useEffect(() => {
+    getTasksUser();
+  }, []);
+
   useEffect(() => {
     // Сортировка по дате
-    let array = sortByDateAscending(testArray);
+    let array = sortByDateAscending(tasks);
     if (isImportantTasks) {
       array = array.filter((item: TaskType) => {
         return item.isImportant.toString() === 'true';
       });
     }
     setShowedTasks(array);
-  }, [isImportantTasks]);
+  }, [isImportantTasks, tasks]);
 
   // Компоненты FlatList
   const ItemSeparator = () => <View style={styles.separator} />;
@@ -124,8 +179,9 @@ const TaskListScreen = () => {
     return <View style={{paddingBottom: 170}} />;
   };
 
-  return (
-    <View style={styles.container}>
+  // Мемоизированная версия FlatList
+  const MemoizedFlatList = useMemo(
+    () => (
       <FlatList
         data={showedTasks}
         renderItem={ItemList}
@@ -136,6 +192,13 @@ const TaskListScreen = () => {
         ItemSeparatorComponent={ItemSeparator}
         contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
       />
+    ),
+    [showedTasks, isImportantTasks],
+  );
+
+  return (
+    <View style={[styles.container, backgroundColor]}>
+      {MemoizedFlatList}
       {isOpenededFormAddTasks ? (
         <FormAddOrUpdate
           isVisible={isOpenededFormAddTasks}
@@ -143,6 +206,7 @@ const TaskListScreen = () => {
           handleSubmitUpdate={updateTasks}
           handleCloseForm={closeFormAddOrUpdateTasks}
           isSubmitLoading={isSubmitLoading}
+          updatingTask={updatingItem}
         />
       ) : (
         <></>
