@@ -17,7 +17,7 @@ if (
 
 function App(): React.JSX.Element {
   //Получить тему
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [navigatorTheme, setNavigatorTheme] = useState<any>(DefaultTheme);
 
   useEffect(() => {
