@@ -47,9 +47,7 @@ const saveSelectedThemeAsyncStore = async (theme: string) => {
 };
 
 /**  Функция для получения текущей темы */
-const getSelectedThemeAsyncStore = async (): Promise<
-  'light' | 'dark' | string
-> => {
+const getSelectedThemeAsyncStore = async (): Promise<'light' | 'dark' | string> => {
   try {
     let theme = await AsyncStorage.getItem('selected_theme');
     let currentDeviceTheme = Appearance.getColorScheme();
