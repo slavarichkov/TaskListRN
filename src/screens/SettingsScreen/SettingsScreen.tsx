@@ -1,23 +1,24 @@
 import {StyleSheet, Text, View} from 'react-native';
 
 //Контекст
+import {useTheme} from '../../contexts/theme/ThemeContext';
 
 import Button from '../../components/buttons/Button';
-import { useTheme } from '../../contexts/theme/ThemeContext';
 
-/** Глобавльные настройки */
+/** Настройки */
 function SettingScreen() {
   const {backgroundColor, colorText, changeTheme} = useTheme();
 
   return (
     <View style={[styles.container, backgroundColor]}>
-      {/* Выбор темы
-            <View
-                style={[styles.containerButtons, { backgroundColor: 'rgba(0,0,0,0.3)' }]}>
-                <ButtonSetting text={'Светлая'} onClick={() => changeTheme('light')} />
-                <Text style={[styles.textNameButtonContainer, colorText]}>{'тема'}</Text>
-                <ButtonSetting text={'Темная'} onClick={() => changeTheme('dark')} />
-            </View> */}
+      <View
+        style={[styles.containerButtons, {backgroundColor: 'rgba(0,0,0,0.3)'}]}>
+        <Button text={'Светлая'} onClick={() => changeTheme('light')} />
+        <Text style={[styles.textNameButtonContainer, colorText]}>
+          {'тема'}
+        </Text>
+        <Button text={'Темная'} onClick={() => changeTheme('dark')} />
+      </View>
     </View>
   );
 }
@@ -34,13 +35,12 @@ const styles = StyleSheet.create({
     width: '90%',
     padding: 20,
     borderRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   textNameButtonContainer: {
     fontSize: 15,
     fontWeight: '500',
     color: 'rgba(0,0,0,1)',
+    paddingVertical: 17,
   },
   containerClientInfo: {
     marginTop: 30,
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
+    paddingVertical: 17,
     color: 'rgba(0,0,0,1)',
     fontSize: 17,
   },
