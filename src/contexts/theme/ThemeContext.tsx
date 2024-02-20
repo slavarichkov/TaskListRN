@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, } from 'react';
 import { Appearance } from 'react-native';
-import { saveSelectedThemeAsyncStore, getSelectedThemeAsyncStore } from '../../utils/asyncStorage/AsyncStore';
+import { saveSelectedThemeAsyncStore, getSelectedThemeAsyncStore } from '../../utils/asyncStoreFunctions';
 
 /**
  * Контекст для работы с темой.
