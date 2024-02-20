@@ -28,7 +28,10 @@ const generateAndSaveDeviceId = async () => {
 /** Получить deviceId из asyncStorage */
 const getDeviceId = async () => {
   try {
-    const deviceId = await AsyncStorage.getItem('deviceId');
+    let deviceId = await AsyncStorage.getItem('deviceId');
+    if (!deviceId) {
+      deviceId = await generateAndSaveDeviceId();
+    }
     return deviceId;
   } catch (error) {
     // Обработка ошибки при получении данных из asyncStorage
@@ -47,7 +50,9 @@ const saveSelectedThemeAsyncStore = async (theme: string) => {
 };
 
 /**  Функция для получения текущей темы */
-const getSelectedThemeAsyncStore = async (): Promise<'light' | 'dark' | string> => {
+const getSelectedThemeAsyncStore = async (): Promise<
+  'light' | 'dark' | string
+> => {
   try {
     let theme = await AsyncStorage.getItem('selected_theme');
     let currentDeviceTheme = Appearance.getColorScheme();

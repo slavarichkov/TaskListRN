@@ -5,4 +5,5 @@ export type TaskType = {
   text: string;
   isImportant: boolean;
   isDone: boolean;
+  author: string | null;
 };

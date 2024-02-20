@@ -1,10 +1,10 @@
-import {StyleSheet, View} from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Form from '../../../components/forms/Form';
 import TextInputWithLabelInside from '../../../components/Inputs/TextInputWithLableAndValidation';
-import {FC, useEffect, useState} from 'react';
-import {TaskType} from '../../../utils/types';
+import { TaskType } from '../../../utils/types';
 import Checkbox from '../../../components/checkboxs/Checkbox';
-import {regexStrokeInput} from '../../../utils/regex';
+import { regexStrokeInput } from '../../../utils/regex';
 
 interface dataSubmit {
   name: string;
@@ -38,15 +38,38 @@ const FormAddOrUpdate: FC<Props> = ({
 
   function onSubmitForm() {
     if (isValidForm) {
-      const taskObj = {
-        name: taskName,
-        text: taskText,
-        isImportant,
-        date: new Date().toString(),
-      };
-      updatingTask ? handleSubmitUpdate(taskObj) : handleSubmitAdd(taskObj);
+      if (updatingTask) {
+        let updatedObj = {};
+        if (taskName !== updatingTask.name) {
+          updatedObj.name = taskName;
+        }
+        if (taskText !== updatingTask.text) {
+          updatedObj.text = taskText;
+        }
+        if (isImportant !== updatingTask.isImportant) {
+          updatedObj.isImportant = isImportant;
+        }
+        handleSubmitUpdate(updatedObj)
+      } else {
+        const taskObj = {
+          name: taskName,
+          text: taskText,
+          isImportant,
+          isDone: false,
+        };
+        handleSubmitAdd(taskObj)
+      }
     }
   }
+
+  //Наполнить форму
+  useEffect(() => {
+    if (updatingTask) {
+      setTaskName(updatingTask.name);
+      setTaskText(updatingTask.text);
+      setTaskImportant(updatingTask.isImportant);
+    }
+  }, [updatingTask]);
 
   //Валидация
   useEffect(() => {
@@ -56,12 +79,14 @@ const FormAddOrUpdate: FC<Props> = ({
       taskText !== '' && regexStrokeInput.test(taskName) ? true : false;
     const isValidUpdate =
       updatingTask &&
-      taskName === updatingTask.name &&
-      taskName === updatingTask.text &&
-      updatingTask.isImportant.toString() === isImportant.toString()
+        taskName === updatingTask.name &&
+        taskText === updatingTask.text &&
+        updatingTask.isImportant.toString() === isImportant.toString()
         ? false
         : true;
+
     if (isValidName && isValidText && isValidUpdate) {
+      console.log(isValidUpdate);
       setIsValidForm(true);
       setMessageValidation('');
     } else {

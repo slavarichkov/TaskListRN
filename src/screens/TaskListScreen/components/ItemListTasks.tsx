@@ -1,3 +1,4 @@
+import React, {FC, useState} from 'react';
 import {
   Dimensions,
   LayoutAnimation,
@@ -9,7 +10,6 @@ import ButtonImage from '../../../components/buttons/ButtonImage';
 
 import imgUpdate from '../../../assets/images/edit-2-svgrepo-com.png';
 import imgRemove from '../../../assets/images/trash-basket-svgrepo-com.png';
-import {FC, useState} from 'react';
 import FormTwoTextButton from '../../../components/forms/FormTwoTextButton';
 import Checkbox from '../../../components/checkboxs/Checkbox';
 import {TaskType} from '../../../utils/types';
@@ -18,8 +18,8 @@ interface Props {
   item: TaskType;
   colorText: {a: string; b: string};
   handleClickUpdate: (data: TaskType) => void;
-  handleClickRemove: (data: TaskType) => void;
-  handleClickDone: (state: boolean) => void;
+  handleClickRemove: (id: string) => void;
+  handleClickDone: (data: TaskType, state: boolean) => void;
 }
 
 const ItemListTasks: FC<Props> = ({
@@ -37,7 +37,7 @@ const ItemListTasks: FC<Props> = ({
   }
 
   function remove() {
-    handleClickRemove(item);
+    handleClickRemove(item._id);
   }
 
   function openFormRemove() {
@@ -52,7 +52,12 @@ const ItemListTasks: FC<Props> = ({
 
   function toggle() {
     if (item) {
-      handleClickDone(!item.isDone);
+      const updatedObj={
+        _id: item._id,
+        author: item.author,
+        isDone: !item.isDone,
+      }
+      handleClickDone(updatedObj);
     }
   }
 
@@ -62,7 +67,7 @@ const ItemListTasks: FC<Props> = ({
         <Text style={[styles.textImportant, colorText]}>
           {item.isImportant ? 'Важная' : 'Не важная'}
         </Text>
-        <Checkbox text={'Выполнено'} isChecked={false} setChecked={toggle} />
+        <Checkbox text={'Выполнено'} isChecked={item.isDone} setChecked={toggle} />
       </View>
       <Text style={[styles.title, colorText]}>{item.name}</Text>
       <Text style={[styles.text, colorText]}>{item.text}</Text>

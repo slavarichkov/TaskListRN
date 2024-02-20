@@ -76,7 +76,7 @@ function MainNavigator() {
         screenOptions={{
           tabBarLabel: () => null, // Скрыть название вкладки
           tabBarStyle: {
-            backgroundColor: theme==='light' ? '##d7d7d9':'#262729',
+            backgroundColor: theme === 'light' ? '#d7d7d9' : '#262729',
             opacity: keyboardOpen && Platform.OS === 'android' ? 0 : 1, //
             width: screenWidth, // Ширина на весь экран
             position: 'absolute',
