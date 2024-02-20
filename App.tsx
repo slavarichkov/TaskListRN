@@ -2,7 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {Platform, StatusBar, UIManager} from 'react-native';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {ThemeContextProvider} from './src/contexts/theme/ThemeContext';
+import {
+  ThemeContextProvider,
+  useTheme,
+} from './src/contexts/theme/ThemeContext';
 
 import {getSelectedThemeAsyncStore} from './src/utils/asyncStoreFunctions';
 import MainNavigator from './src/navigators/MainNavigator';
@@ -17,13 +20,16 @@ if (
 
 function App(): React.JSX.Element {
   //Получить тему
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState('light')
   const [navigatorTheme, setNavigatorTheme] = useState<any>(DefaultTheme);
+
+  useEffect(() => {
+    getSelectedThemeAsyncStore().then(theme => setTheme(theme));
+  }, []);
 
   useEffect(() => {
     let currentNavigatorTheme = DefaultTheme;
     if (theme === 'dark') {
-      setTheme('dark');
       currentNavigatorTheme = {
         ...DefaultTheme,
         colors: {
@@ -32,7 +38,6 @@ function App(): React.JSX.Element {
         },
       };
     } else {
-      setTheme('light');
       currentNavigatorTheme = {
         ...DefaultTheme,
         colors: {
@@ -41,7 +46,6 @@ function App(): React.JSX.Element {
         },
       };
     }
-
     setNavigatorTheme(currentNavigatorTheme);
   }, [theme]);
 
@@ -50,7 +54,7 @@ function App(): React.JSX.Element {
       <ThemeContextProvider>
         <NavigationContainer theme={navigatorTheme}>
           <StatusBar
-            backgroundColor={theme === 'light' ? 'white' : '#c0c7cf'}
+            backgroundColor={theme === 'light' ? '#c0c7cf' : '#333b42'}
             barStyle={theme === 'light' ? 'dark-content' : 'light-content'}
           />
           <MainNavigator />
