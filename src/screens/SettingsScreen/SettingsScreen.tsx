@@ -1,23 +1,42 @@
-import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { RootState } from '@reduxjs/toolkit/query';
 
 //Контекст
-import {useTheme} from '../../contexts/theme/ThemeContext';
+import { useTheme } from '../../contexts/theme/ThemeContext';
+//Reduce
+import { useSelector, useDispatch } from 'react-redux'
+import { onLightTheme, onDarkTheme } from '../../redux/slices/themeSlice';
 
-import Button from '../../components/buttons/Button';
+import Button from '../../commonComponents/buttons/Button';
 
 /** Настройки */
 function SettingScreen() {
-  const {backgroundColor, colorText, changeTheme} = useTheme();
+  const { backgroundColor, colorText, changeTheme } = useTheme();
+  //const count = useSelector((state: RootState) => state.theme.value);
+  //const dispatch = useDispatch();
 
   return (
     <View style={[styles.container, backgroundColor]}>
       <View
-        style={[styles.containerButtons, {backgroundColor: 'rgba(0,0,0,0.3)'}]}>
-        <Button text={'Светлая'} onClick={() => changeTheme('light')} />
+        style={[styles.containerButtons, { backgroundColor: 'rgba(0,0,0,0.3)' }]}>
+        <Button
+          text={'Светлая'}
+          onClick={() => {
+            //dispatch(onLightTheme());
+            changeTheme('light');
+          }}
+        />
         <Text style={[styles.textNameButtonContainer, colorText]}>
           {'тема'}
         </Text>
-        <Button text={'Темная'} onClick={() => changeTheme('dark')} />
+        <Button
+          text={'Темная'}
+          onClick={() => {
+            //dispatch(onDarkTheme());
+            changeTheme('dark');
+          }}
+        />
       </View>
     </View>
   );

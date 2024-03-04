@@ -6,12 +6,12 @@ import {
   Text,
   View,
 } from 'react-native';
-import ButtonImage from '../../../components/buttons/ButtonImage';
+import ButtonImage from '../../../commonComponents/buttons/ButtonImage';
 
 import imgUpdate from '../../../assets/images/edit-2-svgrepo-com.png';
 import imgRemove from '../../../assets/images/trash-basket-svgrepo-com.png';
-import FormTwoTextButton from '../../../components/forms/FormTwoTextButton';
-import Checkbox from '../../../components/checkboxs/Checkbox';
+import FormTwoTextButton from '../../../commonComponents/forms/FormTwoTextButton';
+import Checkbox from '../../../commonComponents/checkboxs/Checkbox';
 import {TaskType} from '../../../utils/types';
 
 interface Props {

@@ -1,20 +1,15 @@
-/* eslint-disable react/no-unstable-nested-components */
-import React, {useEffect, useMemo, useState} from 'react';
-import {Alert, Dimensions, FlatList, StyleSheet, View} from 'react-native';
-import {TaskType} from '../../utils/types';
-import {sortByDateAscending} from '../../utils/functions';
-import {useTheme} from '../../contexts/theme/ThemeContext';
-import HeaderListTasks from './components/HeaderListTasks';
-import ItemListTasks from './components/ItemListTasks';
-import FormAddOrUpdate from './components/FormAddOrUpdate';
-import apiTask from '../../services/api';
-import {getDeviceId} from '../../utils/asyncStoreFunctions';
+import {useEffect, useState} from 'react';
+import {Alert} from 'react-native';
+import {TaskType} from './TaskModel';
+import apiTask from '../../../services/api';
+import {getDeviceId} from '../../../utils/asyncStoreFunctions';
+import {sortByDateAscending} from '../../../utils/functions';
 
-const TaskListScreen = () => {
-  const {colorText, backgroundColor} = useTheme();
-
+export const useTaskPresenter = () => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
-  const [showedTasks, setShowedTasks] = useState<TaskType[] | undefined>(undefined);
+  const [showedTasks, setShowedTasks] = useState<TaskType[] | undefined>(
+    undefined,
+  );
   // Формы
   const [isOpenededFormAddTasks, setOpenedFormAddTasks] =
     useState<boolean>(false);
@@ -77,7 +72,7 @@ const TaskListScreen = () => {
         if (task._id.toString() === updatedTask.task._id.toString()) {
           return updatedTask.task;
         } else {
-          return task; // если это не объект для замены, оставляем его без изменений
+          return task;
         }
       });
       setTasks(updatedTasks);
@@ -145,87 +140,19 @@ const TaskListScreen = () => {
     setShowedTasks(array);
   }, [isImportantTasks, tasks]);
 
-  // Компоненты FlatList
-  const ItemSeparator = () => <View style={styles.separator} />;
-
-  const HeaderList = () => {
-    return (
-      <HeaderListTasks
-        openForm={openFormAddTasks}
-        isFiltredImportants={isImportantTasks}
-        setIsFiltredImportants={controlFiltrerImportant}
-      />
-    );
+  return {
+    showedTasks,
+    isOpenededFormAddTasks,
+    updatingItem,
+    isSubmitLoading,
+    isImportantTasks,
+    handleClickUpdate,
+    handleCkickRemove,
+    openFormAddTasks,
+    closeFormAddOrUpdateTasks,
+    createTasks,
+    updateTasks,
+    handleCkickDone,
+    controlFiltrerImportant,
   };
-
-  type ItemListProps = {
-    item: any;
-  };
-  const ItemList: React.FC<ItemListProps> = ({item}) => {
-    return (
-      <ItemListTasks
-        item={item}
-        handleClickUpdate={handleClickUpdate}
-        handleClickRemove={handleCkickRemove}
-        handleClickDone={handleCkickDone}
-        colorText={colorText}
-      />
-    );
-  };
-
-  const FooterList = () => {
-    return <View style={{paddingBottom: 170}} />;
-  };
-
-  // Мемоизированная версия FlatList
-  const MemoizedFlatList = useMemo(
-    () => (
-      <FlatList
-        data={showedTasks}
-        renderItem={ItemList}
-        keyExtractor={item => item._id}
-        style={styles.flatList} // Применение стилей к FlatList
-        ListHeaderComponent={HeaderList}
-        ListFooterComponent={FooterList} // компонент-футер
-        ItemSeparatorComponent={ItemSeparator}
-        contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}
-      />
-    ),
-    [showedTasks, isImportantTasks],
-  );
-
-  return (
-    <View style={[styles.container, backgroundColor]}>
-      {MemoizedFlatList}
-      {isOpenededFormAddTasks ? (
-        <FormAddOrUpdate
-          isVisible={isOpenededFormAddTasks}
-          handleSubmitAdd={createTasks}
-          handleSubmitUpdate={updateTasks}
-          handleCloseForm={closeFormAddOrUpdateTasks}
-          isSubmitLoading={isSubmitLoading}
-          updatingTask={updatingItem}
-        />
-      ) : (
-        <></>
-      )}
-    </View>
-  );
 };
-
-const screenWidth = Dimensions.get('window').width;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  separator: {
-    height: 30,
-  },
-  flatList: {
-    flex: 1,
-    width: screenWidth,
-  },
-});
-
-export default TaskListScreen;

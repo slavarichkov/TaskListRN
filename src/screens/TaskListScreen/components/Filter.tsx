@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import Checkbox from '../../../components/checkboxs/Checkbox';
+import Checkbox from '../../../commonComponents/checkboxs/Checkbox';
 
 interface Props {
   isActiveFilter: boolean;

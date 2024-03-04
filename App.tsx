@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {Platform, StatusBar, UIManager} from 'react-native';
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
+import { Platform, StatusBar, UIManager } from 'react-native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   ThemeContextProvider,
   useTheme,
 } from './src/contexts/theme/ThemeContext';
+import store from './src/redux/store';
+import { Provider } from 'react-redux';
 
-import {getSelectedThemeAsyncStore} from './src/utils/asyncStoreFunctions';
+import { getSelectedThemeAsyncStore } from './src/utils/asyncStoreFunctions';
 import MainNavigator from './src/navigators/MainNavigator';
 
 // Включение поддержки анимации макета на Android, которая позволяет использовать LayoutAnimation для создания анимаций  компонентов при изменении их размеров и расположения. Однако по умолчанию эта функция отключена.
@@ -20,7 +22,7 @@ if (
 
 function App(): React.JSX.Element {
   //Получить тему
-  const [theme, setTheme] = useState('light')
+  const [theme, setTheme] = useState('light');
   const [navigatorTheme, setNavigatorTheme] = useState<any>(DefaultTheme);
 
   useEffect(() => {
@@ -51,15 +53,17 @@ function App(): React.JSX.Element {
 
   return (
     <SafeAreaProvider>
-      <ThemeContextProvider>
-        <NavigationContainer theme={navigatorTheme}>
-          <StatusBar
-            backgroundColor={theme === 'light' ? '#c0c7cf' : '#333b42'}
-            barStyle={theme === 'light' ? 'dark-content' : 'light-content'}
-          />
-          <MainNavigator />
-        </NavigationContainer>
-      </ThemeContextProvider>
+      <Provider store={store}>
+        <ThemeContextProvider>
+          <NavigationContainer theme={navigatorTheme}>
+            <StatusBar
+              backgroundColor={theme === 'light' ? '#c0c7cf' : '#333b42'}
+              barStyle={theme === 'light' ? 'dark-content' : 'light-content'}
+            />
+            <MainNavigator />
+          </NavigationContainer>
+        </ThemeContextProvider>
+      </Provider>
     </SafeAreaProvider>
   );
 }

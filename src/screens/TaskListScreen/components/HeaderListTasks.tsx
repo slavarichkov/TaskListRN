@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {StyleSheet, View} from 'react-native';
-import Button from '../../../components/buttons/Button';
+import Button from '../../../commonComponents/buttons/Button';
 import Filter from './Filter';
 
 interface Props {
