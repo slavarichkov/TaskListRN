@@ -6,6 +6,7 @@ import {
   ThemeContextProvider,
   useTheme,
 } from './src/contexts/theme/ThemeContext';
+import { AuthContextProvider } from './src/contexts/auth/AuthContext';
 import store from './src/redux/store';
 import { Provider } from 'react-redux';
 
@@ -55,13 +56,15 @@ function App(): React.JSX.Element {
     <SafeAreaProvider>
       <Provider store={store}>
         <ThemeContextProvider>
-          <NavigationContainer theme={navigatorTheme}>
-            <StatusBar
-              backgroundColor={theme === 'light' ? '#c0c7cf' : '#333b42'}
-              barStyle={theme === 'light' ? 'dark-content' : 'light-content'}
-            />
-            <MainNavigator />
-          </NavigationContainer>
+          <AuthContextProvider>
+            <NavigationContainer theme={navigatorTheme}>
+              <StatusBar
+                backgroundColor={theme === 'light' ? '#c0c7cf' : '#333b42'}
+                barStyle={theme === 'light' ? 'dark-content' : 'light-content'}
+              />
+              <MainNavigator />
+            </NavigationContainer>
+          </AuthContextProvider>
         </ThemeContextProvider>
       </Provider>
     </SafeAreaProvider>

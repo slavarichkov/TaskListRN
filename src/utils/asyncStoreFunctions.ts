@@ -78,5 +78,5 @@ export {
   saveSelectedThemeAsyncStore,
   getSelectedThemeAsyncStore,
   generateAndSaveDeviceId, // Генерировать уникальный deviceId и сохранить его в asyncStorage
-  getDeviceId, // Получить deviceId из asyncStorage
+  getDeviceId, // Получить deviceId из asyncStorage,
 };
