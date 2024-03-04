@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Linking, StyleSheet } from 'react-native';
-import { useTheme } from '../../contexts/theme/ThemeContext';
+import { useTheme } from '../../../contexts/theme/ThemeContext';
 
 const Checkbox = ({ text, isChecked, setChecked }) => {
 

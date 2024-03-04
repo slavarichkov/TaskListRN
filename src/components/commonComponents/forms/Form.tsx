@@ -4,9 +4,9 @@ import React, { ReactNode} from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 //Контекст
-import { useTheme } from '../../contexts/theme/ThemeContext';
+import { useTheme } from '../../../contexts/theme/ThemeContext';
 
-import imgCloseButton from '../../assets/images/cross.png';
+import imgCloseButton from '../../../assets/images/cross.png';
 import Button from '../buttons/Button';
 
 interface FormProps {

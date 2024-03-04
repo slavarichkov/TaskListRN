@@ -15,8 +15,8 @@ import {useTheme} from '../contexts/theme/ThemeContext';
 import imgHome from '../assets/images/home-1-svgrepo-com.png';
 import imgSettings from '../assets/images/setting-svgrepo-com.png';
 // Screens
-import TaskListScreen from '../screens/TaskListScreen/TaskListScreen/TaskListScreen';
-import SettingScreen from '../screens/SettingsScreen/SettingsScreen';
+import TaskListScreen from '../screens/TaskListScreen';
+import SettingScreen from '../screens/SettingsScreen';
 
 /**
  * Главный компонент - точка входа приложения, управляющий навигацией и скринами.

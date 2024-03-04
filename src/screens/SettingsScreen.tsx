@@ -3,143 +3,59 @@ import { StyleSheet, Text, View } from 'react-native';
 import { RootState } from '@reduxjs/toolkit/query';
 
 //Контекст
-import { useTheme } from '../../contexts/theme/ThemeContext';
-import { useAuth } from '../../contexts/auth/AuthContext';
+import { useTheme } from '../contexts/theme/ThemeContext';
+import { useAuth } from '../contexts/auth/AuthContext';
 //Reduce
 import { useSelector, useDispatch } from 'react-redux';
-import { onLightTheme, onDarkTheme } from '../../redux/slices/themeSlice';
+import { onLightTheme, onDarkTheme } from '../redux/slices/themeSlice';
 
-import Button from '../../commonComponents/buttons/Button';
-import { deleteToken, getToken, saveUserId } from '../../utils/secureStoreFunctions';
-import apiUser from '../../services/apiUser';
-import { getDeviceId } from '../../utils/asyncStoreFunctions';
-import FormSignUp from './components/FormSignUp/FormSignUp';
-import FormSignIn from './components/FormSignIn/FormSignIn';
-import FormUpdateUser from './components/FormUpdateUser';
+import Button from '../components/commonComponents/buttons/Button';
+import FormSignUp from '../components/SettingScreen/FormSignUp/FormSignUp';
+import FormSignIn from '../components/SettingScreen/FormSignIn/FormSignIn';
+import FormUpdateUser from '../components/SettingScreen/FormUpdateUser';
 import FormRecoveryPassword from './components/FormRecoveryPassword/FormRecoveryPassword';
-import FormLogOut from './components/FormLogOut';
-import FormRemoveProfile from './components/FormRemoveProfile';
+import FormLogOut from '../components/SettingScreen/FormLogOut';
+import FormRemoveProfile from '../components/SettingScreen/FormRemoveProfile';
+
+import { deleteToken, getToken, saveUserId } from '../utils/secureStoreFunctions';
+import apiUser from '../services/apiUser';
+import { getDeviceId } from '../utils/asyncStoreFunctions';
+import { useSettingsScreenPresenter } from '../presenters/SettingsScreenPresenter';
 
 /** Настройки */
 function SettingScreen() {
 
+  const {
+    isOpenFormSignUp,
+    isOpenFormSignIn,
+    isOpenFormUpdateUser,
+    isOpenFormSignOut,
+    isOpenFormDeleteProfile,
+    isOpenFormRecoveryPassword,
+    email,
+    login,
+    isNotification,
+    openFormDeleteProfile,
+    closeFormDeleteProfile,
+    openFormSignOut,
+    closeFormSignUp,
+    handleSuccessfulRegistration,
+    openFormSignUp,
+    openFormSignIn,
+    openFormUpdateUser,
+    closeFormUpdateUser,
+    closeFormSignIn,
+    handleSuccessfulSignIn,
+    openFormRecoveryPassword,
+    closeFormRecoveryPassword,
+    handleAccessRecoveryPassword,
+    closeFormSignOut,
+    logOut,
+    removeProfile,
+  } = useSettingsScreenPresenter();
+
   const { backgroundColor, colorText, changeTheme } = useTheme();
-  const { auth, userData, setUserData,  } = useAuth();
-  //const count = useSelector((state: RootState) => state.theme.value);
-  //const dispatch = useDispatch();
-
-  const [isOpenFormSignUp, setIsOpenFormSignUp] = useState(false);
-  const [isOpenFormSignIn, setIsOpenFormSignIn] = useState(false);
-  const [isOpenFormUpdateUser, setIsOpenFormUpdateUser] = useState(false);
-  const [isOpenFormSignOut, setIsOpenFormSignOut] = useState(false);
-  const [isOpenFormDeleteProfile, setIsOpenFormDeleteProfile] = useState(false);
-  const [isOpenFormRecoveryPassword, setIsOpenFormRecoveryPassword] = useState(false);
-  // Данные профиля
-  const [email, setEmail] = useState('');
-  const [login, setLogin] = useState('');
-  const [isNotification, setIsNotification] = useState(false);
-
-  function openFormDeleteProfile() {
-    setIsOpenFormDeleteProfile(true);
-  }
-
-  function closeFormDeleteProfile() {
-    setIsOpenFormDeleteProfile(false);
-  }
-
-  function openFormSignOut() {
-    setIsOpenFormSignOut(true);
-  }
-
-  function closeFormSignUp() {
-    setIsOpenFormSignUp(false);
-  }
-
-  function handleSuccessfulRegistration() {
-    setUserData(undefined);
-    closeFormSignUp();
-  }
-
-  function openFormSignUp() {
-    setIsOpenFormSignUp(true);
-  }
-
-  function openFormSignIn() {
-    setIsOpenFormSignIn(true);
-  }
-
-  function openFormUpdateUser() {
-    setIsOpenFormUpdateUser(true);
-  }
-
-  function closeFormUpdateUser() {
-    setIsOpenFormUpdateUser(false);
-  }
-
-  function closeFormSignIn() {
-    setIsOpenFormSignIn(false);
-  }
-
-  function handleSuccessfulSignIn() {
-    closeFormSignIn();
-  }
-
-  function openFormRecoveryPassword() {
-    setIsOpenFormRecoveryPassword(true);
-    setIsOpenFormSignIn(false);
-  }
-
-  function closeFormRecoveryPassword() {
-    setIsOpenFormRecoveryPassword(false);
-  }
-
-  function handleAccessRecoveryPassword() {
-
-  }
-
-  function closeFormSignOut() {
-    setIsOpenFormSignOut(false);
-  }
-
-  async function logOut() {
-    const token = await getToken();
-    const idDevice = await getDeviceId();
-    await apiUser.logOut(idDevice, token);
-    await deleteToken();
-    await saveUserId('userId');
-    closeFormSignOut();
-    setUserData(undefined);
-  }
-
-  async function removeProfile(password: string) {
-
-    try {
-      const token = await getToken();
-      const idDevice = await getDeviceId();
-
-      apiUser.removeProfile(token, password, idDevice);
-      await deleteToken();
-      await saveUserId('userId');
-      closeFormSignOut();
-      setUserData(undefined);
-    }
-    catch (err) {
-      console.log(err)
-    }
-
-  }
-
-
-  useEffect(() => {
-    console.log("userData", userData.email)
-    if (auth && userData) {
-      console.log("userData")
-      const userEmail = userData.email;
-      setEmail(userEmail);
-      const userLogin = userData.login;
-      setLogin(userLogin);
-    }
-  }, [userData, auth])
+  const { auth, userData, setUserData, } = useAuth();
 
   return (
     <View style={[styles.container, backgroundColor]}>
@@ -206,10 +122,9 @@ function SettingScreen() {
           visible={isOpenFormSignIn}
           handleSubmit={handleSuccessfulSignIn}
           onClose={closeFormSignIn}
-          openRecoveryPassword={openFormRecoveryPassword}
         />
         : <></>}
-       {/*{isOpenFormUpdateUser ?
+      {/*{isOpenFormUpdateUser ?
         <FormUpdateUser
           visible={isOpenFormUpdateUser}
           closeForm={closeFormUpdateUser}

@@ -6,7 +6,7 @@ import apiUser from '../../../utils/api/apiUser';
 import ModalWithChildren from '../../modals/ModalWithChildren';
 import Button from '../../buttons/Button';
 
-import { regexPassword, regexLogin } from '../../../utils/regex'
+import { regexPassword, regexLogin } from '../../utils/regex'
 import { getToken, getUserId } from '../../../utils/db/secureStore/SecureStore';
 import { getDeviceId } from '../../../utils/db/asyncStorage/AsyncStore';
 

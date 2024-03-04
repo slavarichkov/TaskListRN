@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Form from '../../../commonComponents/forms/Form';
-import TextInputWithLabelInside from '../../../commonComponents/Inputs/TextInputWithLableAndValidation';
+import Form from '../commonComponents/forms/Form';
+import TextInputWithLabelInside from '../commonComponents/Inputs/TextInputWithLableAndValidation';
 import { TaskType } from '../../../utils/types';
-import Checkbox from '../../../commonComponents/checkboxs/Checkbox';
-import { regexStrokeInput } from '../../../utils/regex';
+import Checkbox from '../commonComponents/checkboxs/Checkbox';
+import { regexStrokeInput } from '../../utils/regex';
 
 interface dataSubmit {
   name: string;

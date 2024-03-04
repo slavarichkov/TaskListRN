@@ -1,16 +1,16 @@
 import { BlurView } from '@react-native-community/blur';
 import { useEffect, useState } from "react";
 import { Modal, View, TouchableOpacity, Image, TextInput } from "react-native";
-import apiUser from '../../../../services/apiUser.ts';
-import { saveToken, saveUserId } from '../../../../utils/secureStoreFunctions.js';
+import apiUser from '../../../services/apiUser.ts';
+import { saveToken, saveUserId } from '../../../utils/secureStoreFunctions.js';
 
 import styles from "./styles/styles.js"
-import { regexEmailEn, regexPassword} from "../../../../utils/regex.js";
+import { regexEmailEn, regexPassword} from "../../../utils/regex.js";
 
-import imgArrow from "../../../../images/arrow-sm-left-svgrepo-com.png";
-import { getDeviceId } from '../../../../utils/asyncStoreFunctions.ts';
-import TextInputWithLabelInside from '../../../../commonComponents/Inputs/TextInputWithLableAndValidation.tsx';
-import Button from '../../../../commonComponents/buttons/Button.tsx';
+import imgArrow from "../../../images/arrow-sm-left-svgrepo-com.png";
+import { getDeviceId } from '../../../utils/asyncStoreFunctions.ts';
+import TextInputWithLabelInside from '../../commonComponents/Inputs/TextInputWithLableAndValidation.tsx';
+import Button from '../../commonComponents/buttons/Button.tsx';
 
 function FormSignUp({ visible, onClose, handleSubmit }) {
 

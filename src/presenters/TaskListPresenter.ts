@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
-import {TaskType} from './TaskModel';
-import apiTask from '../../../services/api';
-import {getDeviceId} from '../../../utils/asyncStoreFunctions';
-import {sortByDateAscending} from '../../../utils/functions';
+import {TaskType} from '../models/TaskModel';
+import apiTask from '../services/api';
+import {getDeviceId} from '../utils/asyncStoreFunctions';
+import {sortByDateAscending} from '../utils/functions';
 
 export const useTaskPresenter = () => {
   const [tasks, setTasks] = useState<TaskType[]>([]);

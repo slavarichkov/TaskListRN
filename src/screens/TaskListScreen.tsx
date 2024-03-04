@@ -1,11 +1,11 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React, { useMemo } from 'react';
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
-import { useTheme } from '../../../contexts/theme/ThemeContext';
-import HeaderListTasks from '../components/HeaderListTasks';
-import ItemListTasks from '../components/ItemListTasks';
-import FormAddOrUpdate from '../components/FormAddOrUpdate';
-import { useTaskPresenter } from './TaskListPresenter';
+import { useTheme } from '../contexts/theme/ThemeContext';
+import HeaderListTasks from '../components/TaskList/HeaderListTasks';
+import ItemListTasks from '../components/TaskList/ItemListTasks';
+import FormAddOrUpdate from '../components/TaskList/FormAddOrUpdate';
+import { useTaskPresenter } from '../presenters/TaskListPresenter';
 
 const TaskListScreen = () => {
   const { colorText, backgroundColor } = useTheme();

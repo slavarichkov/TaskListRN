@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 
 import Loader from "../loaders/Loader";
-import { useTheme } from "../../contexts/theme/ThemeContext";
+import { useTheme } from "../../../contexts/theme/ThemeContext";
 
 interface FormTwoTextButtonProps {
     text: string;

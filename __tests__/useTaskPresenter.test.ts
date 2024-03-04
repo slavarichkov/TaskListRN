@@ -1,6 +1,6 @@
 import jest from 'jest';
 import {Alert} from 'react-native';
-import {useTaskPresenter} from '../src/screens/TaskListScreen/TaskListScreen/TaskListPresenter';
+import {useTaskPresenter} from '../src/presenters/TaskListPresenter';
 import {getDeviceId} from '../src/utils/asyncStoreFunctions';
 const {createTasks} = useTaskPresenter();
 

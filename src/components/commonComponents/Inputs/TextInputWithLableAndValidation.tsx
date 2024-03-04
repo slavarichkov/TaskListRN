@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { TextInput, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useTheme } from '../../contexts/theme/ThemeContext';
+import { useTheme } from '../../../contexts/theme/ThemeContext';
 
 type KeyboardType =
     | 'default'
