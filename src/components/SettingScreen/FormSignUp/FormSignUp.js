@@ -7,7 +7,7 @@ import { saveToken, saveUserId } from '../../../utils/secureStoreFunctions.js';
 import styles from "../FormSignIn/styles/styles.js"
 import { regexEmailEn, regexPassword, regexStrokeInput } from "../../../utils/regex.js";
 
-import imgArrow from "../../../images/arrow-sm-left-svgrepo-com.png";
+import imgArrow from "../../../assets/images/close-svgrepo-com.png";
 import { getDeviceId } from '../../../utils/asyncStoreFunctions.ts';
 import TextInputWithLabelInside from '../../commonComponents/Inputs/TextInputWithLableAndValidation.tsx';
 import Button from '../../commonComponents/buttons/Button.tsx';
